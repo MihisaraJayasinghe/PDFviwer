@@ -7,6 +7,7 @@ import { useBookSound } from '@/hooks/useBookSound';
 import { motion } from 'framer-motion';
 import { useMediaQuery } from 'usehooks-ts';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import Image from 'next/image';
 
 // Dynamically import FlipBook to avoid SSR issues with canvas/DOMMatrix
 const FlipBook = dynamic(() => import('@/components/FlipBook'), {
@@ -121,21 +122,7 @@ export default function Home() {
     };
   }, [isAutoRolling]);
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    const now = Date.now();
-    if (now - wheelLockRef.current < 450) return;
-
-    const flip = bookRef.current?.pageFlip?.();
-    if (!flip) return;
-
-    if (e.deltaY > 0 && flip.getCurrentPageIndex() < flip.getPageCount() - 1) {
-      flip.flipNext();
-      wheelLockRef.current = now;
-    } else if (e.deltaY < 0 && flip.getCurrentPageIndex() > 0) {
-      flip.flipPrev();
-      wheelLockRef.current = now;
-    }
-  };
+  // Mouse wheel navigation removed per request (no auto flip on scroll)
 
   const handleReset = () => {
     setIsAutoRolling(false);
@@ -178,12 +165,19 @@ export default function Home() {
           className="w-full flex flex-col items-center gap-4 text-center"
         >
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-2xl bg-hts-secondary/20 border border-hts-secondary/40 flex items-center justify-center">
-              <span className="text-lg font-bold text-hts-primary dark:text-hts-secondary">HTS</span>
+            <div className="h-14 w-14 rounded-full bg-white shadow-md border border-white/50 overflow-hidden flex items-center justify-center">
+              <Image
+                src="/IMG_6950.jpeg"
+                alt="Harbour Tech Solutions"
+                width={56}
+                height={56}
+                className="object-cover h-14 w-14"
+                priority
+              />
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-hts-secondary">Harbour Tech Solutions</p>
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Rule Book 2025</h1>
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Hand Book 2025</h1>
             </div>
           </div>
         </motion.header>
@@ -191,7 +185,6 @@ export default function Home() {
         <section className="relative flex-1 w-full" ref={viewerShellRef}>
           <div
             className={`relative w-full rounded-[24px] overflow-hidden ${isSinglePage ? 'h-[74vh] sm:h-[82vh]' : 'h-[80vh] sm:h-[90vh]'}`}
-            onWheel={handleWheel}
             onContextMenu={(e) => e.preventDefault()}
           >
             <FlipBook
