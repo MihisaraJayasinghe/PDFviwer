@@ -593,6 +593,10 @@
     height: calc(var(--spacing) * 12);
   }
 
+  .h-14 {
+    height: calc(var(--spacing) * 14);
+  }
+
   .h-20 {
     height: calc(var(--spacing) * 20);
   }
@@ -659,6 +663,10 @@
 
   .w-12 {
     width: calc(var(--spacing) * 12);
+  }
+
+  .w-14 {
+    width: calc(var(--spacing) * 14);
   }
 
   .w-20 {
@@ -1219,6 +1227,10 @@
   .bg-clip-text {
     -webkit-background-clip: text;
     background-clip: text;
+  }
+
+  .object-cover {
+    object-fit: cover;
   }
 
   .p-1\.5 {
